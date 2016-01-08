@@ -52,12 +52,13 @@ class Environment():
 
 class ActionReplay():
     def __init__(self):
-        self.X = np.zeros((10000,100,10,12))
-        self.Target = np.zeros((10000,100,10,12))
-        self.Action = np.zeros((10000,10,12))
-        self.Reward = np.zeros(10000)
+        self.Data = np.zeros((20001,100,10,12))
+        self.X = self.Data[:-1]
+        self.Target = self.Data[1:]
+        self.Action = np.zeros((len(self.X),10,12))
+        self.Reward = np.zeros(len(self.X))
         self.N = 0
-        self.Index = range(len(self.X))
+        self.Index = np.array(range(len(self.X)))
         
     def get(self,n=1000):
         if self.N<n:

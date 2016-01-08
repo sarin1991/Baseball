@@ -41,7 +41,7 @@ def getdata(iteration,env,ActionReplay,Learner,n=100):
 def Train(iteration,env,ActionReplay,Learner,TLearner):
     TLearner.setstate(Learner.getstate())
     getdata(iteration,env,ActionReplay,Learner)
-    for i in range(10):
+    for i in range(20):
         X,Target,Action,Reward = ActionReplay.get()
         #print X.shape,Target.shape,Action.shape,Reward.shape 
         print Learner.Train(X,Action,Reward,TLearner.CriticStateValue(Target,Learner.Action(Target)),BS=1000)     #Implementing Double DQN
