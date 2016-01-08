@@ -52,9 +52,8 @@ class Environment():
 
 class ActionReplay():
     def __init__(self):
-        self.Data = np.zeros((20001,100,10,12))
-        self.X = self.Data[:-1]
-        self.Target = self.Data[1:]
+        self.X = np.zeros((5000,100,10,12))
+        self.Target = np.zeros(self.X.shape)
         self.Action = np.zeros((len(self.X),10,12))
         self.Reward = np.zeros(len(self.X))
         self.N = 0
