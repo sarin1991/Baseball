@@ -15,7 +15,7 @@ class Environment():
     Then the rest 4
     '''
     def __init__(self):
-        self.state = np.zeros((100,10,12))
+        self.state = np.zeros((10,10,12))
         self.pitcher = [0,1,2,3,4,5,6]
         self.catcher = [0,1,2,7]
         self.balancer = np.zeros((10,12))
@@ -52,7 +52,7 @@ class Environment():
 
 class ActionReplay():
     def __init__(self):
-        self.X = np.zeros((5000,100,10,12))
+        self.X = np.zeros((5000,10,10,12))
         self.Target = np.zeros(self.X.shape)
         self.Action = np.zeros((len(self.X),10,12))
         self.Reward = np.zeros(len(self.X))
