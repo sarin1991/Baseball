@@ -45,7 +45,7 @@ class Environment():
         
     def updatestate(self,action):
         '''action:10X12,state:100X10X12'''
-        newstate = np.concatenate([np.expand_dims(action,axis=0),self.state[:99]],axis=0)
+        newstate = np.concatenate([np.expand_dims(action,axis=0),self.state[:9]],axis=0)
         cost = self._getcost(action)
         self.state = newstate
         return cost
