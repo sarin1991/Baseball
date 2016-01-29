@@ -30,16 +30,16 @@ class Environment():
         '''action:10X12'''
         C = 0
         if not np.all(np.sum(action[:9],axis=1)==1):
-            C = C - 100000
+            C = C - 1000
         if not np.all(np.sum(action,axis=0)==1):
-            C = C - 100000
+            C = C - 1000
         if not np.sum(action[0,self.pitcher])==1:
-            C = C - 1000
+            C = C - 10
         if not np.sum(action[1,self.catcher])==1:
-            C = C - 1000
+            C = C - 10
         if np.any((action[-1]+self.state[0,-1])>1):
-            C = C - 100
-        C = C - 20*(self.balancer*action).sum()
+            C = C - 1
+        C = C - 0.2*(self.balancer*action).sum()
         self.balancer = action+0.8*self.balancer
         return C
         

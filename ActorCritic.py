@@ -9,7 +9,7 @@ class Actor():
        State: NoneX100X10X12
        Actor: NoneX10X12'''
     def __init__(self,StateVar):
-        self.LearningRate = 0.001
+        self.LearningRate = 0.01
         self.InputVar = StateVar
         self.network = self.BuildNetwork()
         self.Predict = self.getPredict()
@@ -17,25 +17,26 @@ class Actor():
         
     def BuildNetwork(self):
         network = lasagne.layers.InputLayer(shape=(None,100,10,12),input_var=self.InputVar,name='0')
-        network = lasagne.layers.DenseLayer(network,num_units=1000,W=lasagne.init.GlorotUniform(gain='relu'),nonlinearity=lasagne.nonlinearities.leaky_rectify,name = '1')
+        network = lasagne.layers.DenseLayer(network,num_units=15000,W=lasagne.init.GlorotUniform(gain='relu'),nonlinearity=lasagne.nonlinearities.leaky_rectify,name = '1')
         network = BN.batch_norm(network,name = '1')
-        network = lasagne.layers.DropoutLayer(network)
+        #network = lasagne.layers.DropoutLayer(network,0.8)
         
-        network = lasagne.layers.DenseLayer(network,num_units=500,W=lasagne.init.GlorotUniform(gain='relu'),nonlinearity=lasagne.nonlinearities.leaky_rectify,name = '2')
+        network = lasagne.layers.DenseLayer(network,num_units=10000,W=lasagne.init.GlorotUniform(gain='relu'),nonlinearity=lasagne.nonlinearities.leaky_rectify,name = '2')
         network = BN.batch_norm(network,name = '2')
-        network = lasagne.layers.DropoutLayer(network)
+        #network = lasagne.layers.DropoutLayer(network)
         
-        network = lasagne.layers.DenseLayer(network,num_units=200,W=lasagne.init.GlorotUniform(gain='relu'),nonlinearity=lasagne.nonlinearities.leaky_rectify,name = '3')
+        network = lasagne.layers.DenseLayer(network,num_units=5000,W=lasagne.init.GlorotUniform(gain='relu'),nonlinearity=lasagne.nonlinearities.leaky_rectify,name = '3')
         network = BN.batch_norm(network,name = '3')
-        network = lasagne.layers.DropoutLayer(network)
+        #network = lasagne.layers.DropoutLayer(network)
         
-        network = lasagne.layers.DenseLayer(network,num_units=150,W=lasagne.init.GlorotUniform(gain='relu'),nonlinearity=lasagne.nonlinearities.leaky_rectify,name = '4')
+        network = lasagne.layers.DenseLayer(network,num_units=1000,W=lasagne.init.GlorotUniform(gain='relu'),nonlinearity=lasagne.nonlinearities.leaky_rectify,name = '4')
         network = BN.batch_norm(network,name = '4')
-        network = lasagne.layers.DropoutLayer(network)
+        #network = lasagne.layers.DropoutLayer(network)
         
-        network = lasagne.layers.DenseLayer(network,num_units=120,W=lasagne.init.GlorotUniform(gain='relu'),nonlinearity=lasagne.nonlinearities.sigmoid,name = '6')
+        network = lasagne.layers.DenseLayer(network,num_units=120,W=lasagne.init.GlorotUniform(gain=1.0),nonlinearity=lasagne.nonlinearities.sigmoid,name = '5')
+        network = BN.batch_norm(network,name = '5')
         
-        network = lasagne.layers.ReshapeLayer(network,shape=([0],10,12),name='6')
+        network = lasagne.layers.ReshapeLayer(network,shape=([0],10,12),name='5')
         return network
         
     def getPredict(self):
@@ -54,8 +55,8 @@ class Actor():
 class Critic():
     '''Predict Q-Value given Action and State'''
     def __init__(self,ActVar,StateVar):
-        self.LearningRate = 0.001
-        self.gamma = 0.9
+        self.LearningRate = 100
+        self.gamma = 0.8
         self.ActVar = ActVar
         self.StateVar = StateVar
         self.RewardVar = T.vector('Reward')
@@ -88,27 +89,29 @@ class Critic():
         StateInputLayer = lasagne.layers.InputLayer(shape=(None,100,10,12),input_var=self.StateVar,name='0')
         
         network = lasagne.layers.ConcatLayer([ActInputLayer,StateInputLayer],axis=1)
-        network = lasagne.layers.DenseLayer(network,num_units=1000,W=lasagne.init.GlorotUniform(gain='relu'),nonlinearity=lasagne.nonlinearities.leaky_rectify,name = '1')        
+        network = lasagne.layers.DenseLayer(network,num_units=10000,W=lasagne.init.GlorotUniform(gain='relu'),nonlinearity=lasagne.nonlinearities.leaky_rectify,name = '1')        
         network = BN.batch_norm(network,name = '1')
-        network = lasagne.layers.DropoutLayer(network)
+        #network = lasagne.layers.DropoutLayer(network)
         
-        network = lasagne.layers.DenseLayer(network,num_units=100,W=lasagne.init.GlorotUniform(gain='relu'),nonlinearity=lasagne.nonlinearities.leaky_rectify,name = '2')
+        network = lasagne.layers.DenseLayer(network,num_units=1000,W=lasagne.init.GlorotUniform(gain='relu'),nonlinearity=lasagne.nonlinearities.leaky_rectify,name = '2')
         network = BN.batch_norm(network,name = '2')
-        network = lasagne.layers.DropoutLayer(network)
+        #network = lasagne.layers.DropoutLayer(network)
         
-        network = lasagne.layers.DenseLayer(network,num_units=50,W=lasagne.init.GlorotUniform(gain='relu'),nonlinearity=lasagne.nonlinearities.leaky_rectify,name = '3')
+        network = lasagne.layers.DenseLayer(network,num_units=500,W=lasagne.init.GlorotUniform(gain='relu'),nonlinearity=lasagne.nonlinearities.leaky_rectify,name = '3')
         network = BN.batch_norm(network,name = '3')
-        network = lasagne.layers.DropoutLayer(network)
+        #network = lasagne.layers.DropoutLayer(network)
         
-        network = lasagne.layers.DenseLayer(network,num_units=20,W=lasagne.init.GlorotUniform(gain='relu'),nonlinearity=lasagne.nonlinearities.leaky_rectify,name = '4')
+        network = lasagne.layers.DenseLayer(network,num_units=40,W=lasagne.init.GlorotUniform(gain='relu'),nonlinearity=lasagne.nonlinearities.leaky_rectify,name = '4')
         network = BN.batch_norm(network,name = '4')
-        network = lasagne.layers.DropoutLayer(network)
+        #network = lasagne.layers.DropoutLayer(network)
         
         network = lasagne.layers.DenseLayer(network,num_units=5,W=lasagne.init.GlorotUniform(gain='relu'),nonlinearity=lasagne.nonlinearities.leaky_rectify,name = '5')
         network = BN.batch_norm(network,name = '5')
-        network = lasagne.layers.DropoutLayer(network)
+        #network = lasagne.layers.DropoutLayer(network)
         
         network = lasagne.layers.DenseLayer(network,num_units=1,W=lasagne.init.GlorotUniform(gain='relu'),nonlinearity=lasagne.nonlinearities.leaky_rectify,name = '6')
+        network = BN.batch_norm(network,name = '6')
+        
         return network
         
     def getTrain(self):
